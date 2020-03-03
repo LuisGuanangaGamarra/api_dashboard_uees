@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 use App\Traits\ApiResponser;
+use App\Traits\ConexionManager;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Capsule\Manager as Capsule;
+use PDO;
 //use App\Traits\ConexionManager;
 
 class TestController extends Controller
 {
     use ApiResponser;
-   // use ConexionManager;
-    //private $conexion;
+    use ConexionManager;
+   //private $capsule=null;
     /**
      * Create a new controller instance.
      *
@@ -17,21 +20,22 @@ class TestController extends Controller
      */
     public function __construct()
     {
-        //$conexion=$this->getConexion();
+     
     }
 
     public function getEstudiantes ()
     {
-       /* if($conexion != null)
+        try {
+           $db = new PDO ("dblib:host=".env('DB_HOST').":". env('DB_PORT').";dbname=".
+           env('DB_DATABASE').
+           ", ".env('DB_USERNAME').",". env('DB_PASSWORD'));
 
-        {*/
-            $db=DB::connection("sqlsrv")->select('select top 10 * from dbo.app_menu');
-            return $this->successResponse($db );
+          
+           return $this->successResponse(var_dump($db));
 
-       /* }
-        else{
-            return $this->errorResponse("No se pudo lograr la conexion a la base",-1);
-        }*/
+        } catch (PDOException $e) {
+            return $this->errorResponse("ERROR DE CONEXION");
+        }
     }
 
 
